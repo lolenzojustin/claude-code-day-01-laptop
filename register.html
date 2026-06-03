@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            bg: '#090A14',
+                            card: '#111222',
+                            border: '#1C1F3A',
+                            muted: '#3A3D5C',
+                        },
+                        primary: '#DF6B33',
+                        'primary-hover': '#C85C28',
+                    },
+                    fontFamily: {
+                        poppins: ['Poppins', 'sans-serif'],
+                        inter: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: #090A14; }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #090A14; }
+        ::-webkit-scrollbar-thumb { background: #1C1F3A; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #DF6B33; }
+
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus {
+            -webkit-text-fill-color: #E2E4E8;
+            -webkit-box-shadow: 0 0 0px 1000px #111222 inset;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+
+        .input-error { border-color: #EF4444 !important; box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important; }
+        .input-success { border-color: #22C55E !important; }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center px-4 py-8 font-inter">
+
+    <div class="fixed inset-0 pointer-events-none overflow-hidden">
+        <div class="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[120px]"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-primary/3 rounded-full blur-[100px]"></div>
+    </div>
+
+    <div class="relative w-full max-w-[480px]">
+
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-primary/10 border border-primary/20 mb-4">
+                <i data-lucide="user-plus" class="w-7 h-7 text-primary"></i>
+            </div>
+            <h1 class="font-poppins font-extrabold text-2xl text-white mb-1">Create Account</h1>
+            <p class="font-inter text-sm text-gray-400">Join us and get started today</p>
+        </div>
+
+        <div class="bg-dark-card border border-dark-border rounded-2xl p-6 sm:p-8 shadow-2xl shadow-black/50">
+
+            <form id="registerForm" class="space-y-5">
+
+                <!-- Full Name -->
+                <div>
+                    <label for="fullname" class="block font-inter text-sm font-medium text-gray-300 mb-2">
+                        Full Name <span class="text-red-400">*</span>
+                    </label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">
+                            <i data-lucide="user" class="w-4 h-4"></i>
+                        </span>
+                        <input
+                            id="fullname"
+                            type="text"
+                            placeholder="John Doe"
+                            autocomplete="name"
+                            class="w-full pl-11 pr-4 py-3 bg-dark-bg border border-dark-border rounded-xl text-gray-200 font-inter text-sm placeholder:text-gray-600 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all duration-200"
+                        >
+                    </div>
+                    <p id="fullnameError" class="hidden mt-1.5 flex items-center gap-1.5 font-inter text-xs text-red-400">
+                        <i data-lucide="alert-circle" class="w-3.5 h-3.5 shrink-0"></i>
+                        <span></span>
+                    </p>
+                </div>
+
+                <!-- Email -->
+                <div>
+                    <label for="email" class="block font-inter text-sm font-medium text-gray-300 mb-2">
+                        Email Address <span class="text-red-400">*</span>
+                    </label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">
+                            <i data-lucide="mail" class="w-4 h-4"></i>
+                        </span>
+                        <input
+                            id="email"
+                            type="email"
+                            placeholder="you@example.com"
+                            autocomplete="email"
+                            class="w-full pl-11 pr-4 py-3 bg-dark-bg border border-dark-border rounded-xl text-gray-200 font-inter text-sm placeholder:text-gray-600 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all duration-200"
+                        >
+                    </div>
+                    <p id="emailError" class="hidden mt-1.5 flex items-center gap-1.5 font-inter text-xs text-red-400">
+                        <i data-lucide="alert-circle" class="w-3.5 h-3.5 shrink-0"></i>
+                        <span></span>
+                    </p>
+                </div>
+
+                <!-- Phone -->
+                <div>
+                    <label for="phone" class="block font-inter text-sm font-medium text-gray-300 mb-2">
+                        Phone Number <span class="text-gray-600 font-normal">(optional)</span>
+                    </label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">
+                            <i data-lucide="phone" class="w-4 h-4"></i>
+                        </span>
+                        <input
+                            id="phone"
+                            type="tel"
+                            placeholder="0123456789"
+                            autocomplete="tel"
+                            class="w-full pl-11 pr-4 py-3 bg-dark-bg border border-dark-border rounded-xl text-gray-200 font-inter text-sm placeholder:text-gray-600 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all duration-200"
+                        >
+                    </div>
+                    <p id="phoneError" class="hidden mt-1.5 flex items-center gap-1.5 font-inter text-xs text-red-400">
+                        <i data-lucide="alert-circle" class="w-3.5 h-3.5 shrink-0"></i>
+                        <span></span>
+                    </p>
+                </div>
+
+                <!-- Gender -->
+                <div>
+                    <label class="block font-inter text-sm font-medium text-gray-300 mb-3">
+                        Gender <span class="text-gray-600 font-normal">(optional)</span>
+                    </label>
+                    <div class="flex gap-4">
+                        <label class="flex items-center gap-2 cursor-pointer select-none group">
+                            <div class="relative">
+                                <input type="radio" name="gender" value="male" class="sr-only peer">
+                                <div class="w-5 h-5 border-2 border-dark-muted rounded-full peer-checked:border-primary peer-checked:bg-primary transition-all duration-200 flex items-center justify-center overflow-hidden">
+                                    <div class="w-2 h-2 bg-white rounded-full translate-y-5 peer-checked:translate-y-0 transition-all duration-200"></div>
+                                </div>
+                            </div>
+                            <span class="font-inter text-sm text-gray-400 group-hover:text-gray-300 transition-colors duration-200">Male</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer select-none group">
+                            <div class="relative">
+                                <input type="radio" name="gender" value="female" class="sr-only peer">
+                                <div class="w-5 h-5 border-2 border-dark-muted rounded-full peer-checked:border-primary peer-checked:bg-primary transition-all duration-200 flex items-center justify-center overflow-hidden">
+                                    <div class="w-2 h-2 bg-white rounded-full translate-y-5 peer-checked:translate-y-0 transition-all duration-200"></div>
+                                </div>
+                            </div>
+                            <span class="font-inter text-sm text-gray-400 group-hover:text-gray-300 transition-colors duration-200">Female</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer select-none group">
+                            <div class="relative">
+                                <input type="radio" name="gender" value="other" class="sr-only peer">
+                                <div class="w-5 h-5 border-2 border-dark-muted rounded-full peer-checked:border-primary peer-checked:bg-primary transition-all duration-200 flex items-center justify-center overflow-hidden">
+                                    <div class="w-2 h-2 bg-white rounded-full translate-y-5 peer-checked:translate-y-0 transition-all duration-200"></div>
+                                </div>
+                            </div>
+                            <span class="font-inter text-sm text-gray-400 group-hover:text-gray-300 transition-colors duration-200">Other</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div>
+                    <label for="password" class="block font-inter text-sm font-medium text-gray-300 mb-2">
+                        Password <span class="text-red-400">*</span>
+                    </label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">
+                            <i data-lucide="lock" class="w-4 h-4"></i>
+                        </span>
+                        <input
+                            id="password"
+                            type="password"
+                            placeholder="Create a strong password"
+                            autocomplete="new-password"
+                            class="w-full pl-11 pr-12 py-3 bg-dark-bg border border-dark-border rounded-xl text-gray-200 font-inter text-sm placeholder:text-gray-600 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all duration-200"
+                        >
+                        <button
+                            type="button"
+                            id="togglePassword"
+                            class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300 transition-colors duration-200"
+                        >
+                            <i data-lucide="eye" class="w-4 h-4" id="eyeIcon"></i>
+                        </button>
+                    </div>
+                    <p id="passwordError" class="hidden mt-1.5 flex items-center gap-1.5 font-inter text-xs text-red-400">
+                        <i data-lucide="alert-circle" class="w-3.5 h-3.5 shrink-0"></i>
+                        <span></span>
+                    </p>
+                </div>
+
+                <!-- Confirm Password -->
+                <div>
+                    <label for="confirmPassword" class="block font-inter text-sm font-medium text-gray-300 mb-2">
+                        Confirm Password <span class="text-red-400">*</span>
+                    </label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500">
+                            <i data-lucide="lock" class="w-4 h-4"></i>
+                        </span>
+                        <input
+                            id="confirmPassword"
+                            type="password"
+                            placeholder="Re-enter your password"
+                            autocomplete="new-password"
+                            class="w-full pl-11 pr-12 py-3 bg-dark-bg border border-dark-border rounded-xl text-gray-200 font-inter text-sm placeholder:text-gray-600 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all duration-200"
+                        >
+                        <button
+                            type="button"
+                            id="toggleConfirmPassword"
+                            class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300 transition-colors duration-200"
+                        >
+                            <i data-lucide="eye" class="w-4 h-4" id="eyeConfirmIcon"></i>
+                        </button>
+                    </div>
+                    <p id="confirmPasswordError" class="hidden mt-1.5 flex items-center gap-1.5 font-inter text-xs text-red-400">
+                        <i data-lucide="alert-circle" class="w-3.5 h-3.5 shrink-0"></i>
+                        <span></span>
+                    </p>
+                </div>
+
+                <!-- Address -->
+                <div>
+                    <label for="address" class="block font-inter text-sm font-medium text-gray-300 mb-2">
+                        Address <span class="text-gray-600 font-normal">(optional)</span>
+                    </label>
+                    <div class="relative">
+                        <span class="absolute left-4 top-3 text-gray-500">
+                            <i data-lucide="map-pin" class="w-4 h-4"></i>
+                        </span>
+                        <textarea
+                            id="address"
+                            rows="2"
+                            placeholder="123 Main Street, City, Country"
+                            autocomplete="street-address"
+                            class="w-full pl-11 pr-4 py-3 bg-dark-bg border border-dark-border rounded-xl text-gray-200 font-inter text-sm placeholder:text-gray-600 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all duration-200 resize-none"
+                        ></textarea>
+                    </div>
+                </div>
+
+                <!-- Terms -->
+                <div class="flex items-start gap-3">
+                    <label class="flex items-start gap-2.5 cursor-pointer select-none group pt-0.5">
+                        <div class="relative mt-0.5">
+                            <input type="checkbox" id="terms" class="sr-only peer">
+                            <div class="w-5 h-5 border-2 border-dark-muted rounded-md peer-checked:bg-primary peer-checked:border-primary transition-all duration-200 peer-hover:border-primary/70 flex items-center justify-center overflow-hidden">
+                                <i data-lucide="check" class="w-3 h-3 text-white translate-y-5 peer-checked:translate-y-0 transition-all duration-200"></i>
+                            </div>
+                        </div>
+                        <span class="font-inter text-sm text-gray-400 group-hover:text-gray-300 transition-colors duration-200 leading-snug">
+                            I agree to the
+                            <a href="#" class="text-primary hover:text-primary-hover transition-colors duration-200">Terms of Service</a>
+                            and
+                            <a href="#" class="text-primary hover:text-primary-hover transition-colors duration-200">Privacy Policy</a>
+                        </span>
+                    </label>
+                </div>
+                <p id="termsError" class="hidden -mt-3 ml-8 flex items-center gap-1.5 font-inter text-xs text-red-400">
+                    <i data-lucide="alert-circle" class="w-3.5 h-3.5 shrink-0"></i>
+                    <span></span>
+                </p>
+
+                <!-- Submit -->
+                <button
+                    type="submit"
+                    class="w-full py-3 bg-primary hover:bg-primary-hover text-white font-poppins font-semibold text-sm rounded-xl transition-all duration-200 flex items-center justify-center gap-2 active:scale-[0.98] cursor-pointer"
+                >
+                    Create Account
+                    <i data-lucide="user-plus" class="w-4 h-4"></i>
+                </button>
+
+            </form>
+
+            <!-- Divider -->
+            <div class="flex items-center gap-3 my-6">
+                <div class="flex-1 h-px bg-dark-border"></div>
+                <span class="font-inter text-xs text-gray-600">or continue with</span>
+                <div class="flex-1 h-px bg-dark-border"></div>
+            </div>
+
+            <!-- Social -->
+            <div class="grid grid-cols-3 gap-3">
+
+                <button class="flex items-center justify-center gap-2 py-3 px-2 bg-dark-bg border border-dark-border rounded-xl hover:border-primary/40 hover:bg-dark-border/30 transition-all duration-200 group cursor-pointer">
+                    <i data-lucide="chrome" class="w-5 h-5 text-gray-400 group-hover:text-primary transition-colors duration-200"></i>
+                    <span class="font-inter text-xs text-gray-400 group-hover:text-gray-200 transition-colors duration-200 hidden sm:block">Google</span>
+                </button>
+
+                <button class="flex items-center justify-center gap-2 py-3 px-2 bg-dark-bg border border-dark-border rounded-xl hover:border-primary/40 hover:bg-dark-border/30 transition-all duration-200 group cursor-pointer">
+                    <i data-lucide="github" class="w-5 h-5 text-gray-400 group-hover:text-white transition-colors duration-200"></i>
+                    <span class="font-inter text-xs text-gray-400 group-hover:text-gray-200 transition-colors duration-200 hidden sm:block">GitHub</span>
+                </button>
+
+                <button class="flex items-center justify-center gap-2 py-3 px-2 bg-dark-bg border border-dark-border rounded-xl hover:border-primary/40 hover:bg-dark-border/30 transition-all duration-200 group cursor-pointer">
+                    <i data-lucide="facebook" class="w-5 h-5 text-gray-400 group-hover:text-blue-400 transition-colors duration-200"></i>
+                    <span class="font-inter text-xs text-gray-400 group-hover:text-gray-200 transition-colors duration-200 hidden sm:block">Facebook</span>
+                </button>
+
+            </div>
+
+        </div>
+
+        <p class="text-center mt-6 font-inter text-sm text-gray-500">
+            Already have an account?
+            <a href="login.html" class="text-primary hover:text-primary-hover transition-colors duration-200 font-medium">Sign in</a>
+        </p>
+
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        const fullnameInput = document.getElementById('fullname');
+        const emailInput = document.getElementById('email');
+        const phoneInput = document.getElementById('phone');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const termsInput = document.getElementById('terms');
+
+        const fullnameError = document.getElementById('fullnameError');
+        const emailError = document.getElementById('emailError');
+        const phoneError = document.getElementById('phoneError');
+        const passwordError = document.getElementById('passwordError');
+        const confirmPasswordError = document.getElementById('confirmPasswordError');
+        const termsError = document.getElementById('termsError');
+
+        const togglePasswordBtn = document.getElementById('togglePassword');
+        const toggleConfirmPasswordBtn = document.getElementById('toggleConfirmPassword');
+        const eyeIcon = document.getElementById('eyeIcon');
+        const eyeConfirmIcon = document.getElementById('eyeConfirmIcon');
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const phoneRegex = /^\d{10}$/;
+
+        function showError(input, errorEl, message) {
+            input.classList.add('input-error');
+            input.classList.remove('input-success');
+            errorEl.querySelector('span').textContent = message;
+            errorEl.classList.remove('hidden');
+        }
+
+        function clearError(input, errorEl) {
+            input.classList.remove('input-error');
+            input.classList.remove('input-success');
+            errorEl.classList.add('hidden');
+        }
+
+        function validateFullname() {
+            const value = fullnameInput.value.trim();
+            if (!value) {
+                showError(fullnameInput, fullnameError, 'Full name is required');
+                return false;
+            }
+            clearError(fullnameInput, fullnameError);
+            fullnameInput.classList.add('input-success');
+            return true;
+        }
+
+        function validateEmail() {
+            const value = emailInput.value.trim();
+            if (!value) {
+                showError(emailInput, emailError, 'Email is required');
+                return false;
+            }
+            if (!emailRegex.test(value)) {
+                showError(emailInput, emailError, 'Invalid email address');
+                return false;
+            }
+            clearError(emailInput, emailError);
+            emailInput.classList.add('input-success');
+            return true;
+        }
+
+        function validatePhone() {
+            const value = phoneInput.value.trim();
+            if (value && !phoneRegex.test(value)) {
+                showError(phoneInput, phoneError, 'Phone number must be exactly 10 digits');
+                return false;
+            }
+            clearError(phoneInput, phoneError);
+            return true;
+        }
+
+        function validatePassword() {
+            const value = passwordInput.value;
+            if (!value) {
+                showError(passwordInput, passwordError, 'Password is required');
+                return false;
+            }
+            clearError(passwordInput, passwordError);
+            return true;
+        }
+
+        function validateConfirmPassword() {
+            const value = confirmPasswordInput.value;
+            if (!value) {
+                showError(confirmPasswordInput, confirmPasswordError, 'Please confirm your password');
+                return false;
+            }
+            if (value !== passwordInput.value) {
+                showError(confirmPasswordInput, confirmPasswordError, 'Passwords do not match');
+                return false;
+            }
+            clearError(confirmPasswordInput, confirmPasswordError);
+            confirmPasswordInput.classList.add('input-success');
+            return true;
+        }
+
+        function validateTerms() {
+            if (!termsInput.checked) {
+                termsError.querySelector('span').textContent = 'You must agree to the terms and conditions';
+                termsError.classList.remove('hidden');
+                return false;
+            }
+            termsError.classList.add('hidden');
+            return true;
+        }
+
+        fullnameInput.addEventListener('blur', validateFullname);
+        fullnameInput.addEventListener('input', () => {
+            if (fullnameInput.classList.contains('input-error')) validateFullname();
+        });
+
+        emailInput.addEventListener('blur', validateEmail);
+        emailInput.addEventListener('input', () => {
+            if (emailInput.classList.contains('input-error')) validateEmail();
+        });
+
+        phoneInput.addEventListener('blur', validatePhone);
+        phoneInput.addEventListener('input', () => {
+            if (phoneInput.classList.contains('input-error')) validatePhone();
+            // Strip non-digit characters on input
+            phoneInput.value = phoneInput.value.replace(/\D/g, '').slice(0, 10);
+        });
+
+        passwordInput.addEventListener('blur', validatePassword);
+        passwordInput.addEventListener('input', () => {
+            if (passwordInput.classList.contains('input-error')) validatePassword();
+        });
+
+        confirmPasswordInput.addEventListener('blur', validateConfirmPassword);
+        confirmPasswordInput.addEventListener('input', () => {
+            if (confirmPasswordInput.classList.contains('input-error')) validateConfirmPassword();
+        });
+
+        function togglePassword(input, icon) {
+            const isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+            icon.setAttribute('data-lucide', isPassword ? 'eye-off' : 'eye');
+            lucide.createIcons();
+        }
+
+        togglePasswordBtn.addEventListener('click', () => togglePassword(passwordInput, eyeIcon));
+        toggleConfirmPasswordBtn.addEventListener('click', () => togglePassword(confirmPasswordInput, eyeConfirmIcon));
+
+        document.getElementById('registerForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const nameOk = validateFullname();
+            const emailOk = validateEmail();
+            const phoneOk = validatePhone();
+            const passOk = validatePassword();
+            const confirmOk = validateConfirmPassword();
+            const termsOk = validateTerms();
+
+            if (!nameOk || !emailOk || !phoneOk || !passOk || !confirmOk || !termsOk) return;
+
+            const data = {
+                fullname: fullnameInput.value.trim(),
+                email: emailInput.value.trim(),
+                phone: phoneInput.value.trim(),
+                gender: document.querySelector('input[name="gender"]:checked')?.value || '',
+                password: passwordInput.value,
+                address: document.getElementById('address').value.trim(),
+                terms: termsInput.checked,
+            };
+            console.log(data);
+            alert('Registration successful!');
+        });
+    </script>
+
+</body>
+</html>
