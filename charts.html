@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Report</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            bg: '#090A14',
+                            card: '#111222',
+                            border: '#1C1F3A',
+                            muted: '#3A3D5C',
+                        },
+                        primary: '#DF6B33',
+                        'primary-hover': '#C85C28',
+                    },
+                    fontFamily: {
+                        poppins: ['Poppins', 'sans-serif'],
+                        inter: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: #090A14; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #090A14; }
+        ::-webkit-scrollbar-thumb { background: #1C1F3A; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #DF6B33; }
+        canvas { max-height: 300px; }
+        @media (min-width: 768px) { canvas { max-height: 280px; } }
+        @media (min-width: 1024px) { canvas { max-height: 320px; } }
+    </style>
+</head>
+<body class="min-h-screen font-inter">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-dark-card/80 backdrop-blur-md border-b border-dark-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+                        <i data-lucide="bar-chart-3" class="w-5 h-5 text-primary"></i>
+                    </div>
+                    <h2 class="font-poppins font-bold text-lg text-white hidden sm:block">E-Commerce Dashboard</h2>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button class="p-2 rounded-lg hover:bg-dark-border transition-colors duration-200 text-gray-400 hover:text-gray-200 cursor-pointer">
+                        <i data-lucide="bell" class="w-5 h-5"></i>
+                    </button>
+                    <button class="p-2 rounded-lg hover:bg-dark-border transition-colors duration-200 text-gray-400 hover:text-gray-200 cursor-pointer">
+                        <i data-lucide="settings" class="w-5 h-5"></i>
+                    </button>
+                    <div class="w-9 h-9 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center">
+                        <span class="text-primary font-poppins font-semibold text-sm">AD</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+        <!-- Page Title + Period Filter -->
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div>
+                <h1 class="font-poppins font-extrabold text-2xl text-white">Sales Report</h1>
+                <p class="font-inter text-sm text-gray-400 mt-1">E-commerce performance overview</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <button class="flex items-center gap-2 px-4 py-2 bg-dark-card border border-dark-border rounded-lg text-gray-400 hover:text-gray-200 hover:border-primary/40 transition-all duration-200 text-sm font-inter cursor-pointer">
+                    <i data-lucide="calendar" class="w-4 h-4"></i>
+                    <span>Jan — Dec 2025</span>
+                    <i data-lucide="chevron-down" class="w-3 h-3"></i>
+                </button>
+                <button class="flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary-hover text-white rounded-lg transition-all duration-200 text-sm font-inter cursor-pointer">
+                    <i data-lucide="download" class="w-4 h-4"></i>
+                    <span class="hidden sm:inline">Export</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- KPI Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+            <div class="bg-dark-card border border-dark-border rounded-2xl p-5">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center">
+                        <i data-lucide="dollar-sign" class="w-5 h-5 text-green-400"></i>
+                    </span>
+                    <span class="flex items-center gap-1 text-xs font-inter font-medium text-green-400 bg-green-400/10 px-2 py-1 rounded-full">
+                        <i data-lucide="trending-up" class="w-3 h-3"></i> +12.5%
+                    </span>
+                </div>
+                <p class="font-inter text-2xl font-bold text-white">$284,590</p>
+                <p class="font-inter text-xs text-gray-500 mt-1">Total Revenue</p>
+            </div>
+
+            <div class="bg-dark-card border border-dark-border rounded-2xl p-5">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="w-10 h-10 rounded-xl bg-blue-500/10 flex items-center justify-center">
+                        <i data-lucide="shopping-cart" class="w-5 h-5 text-blue-400"></i>
+                    </span>
+                    <span class="flex items-center gap-1 text-xs font-inter font-medium text-green-400 bg-green-400/10 px-2 py-1 rounded-full">
+                        <i data-lucide="trending-up" class="w-3 h-3"></i> +8.3%
+                    </span>
+                </div>
+                <p class="font-inter text-2xl font-bold text-white">3,847</p>
+                <p class="font-inter text-xs text-gray-500 mt-1">Total Orders</p>
+            </div>
+
+            <div class="bg-dark-card border border-dark-border rounded-2xl p-5">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                        <i data-lucide="users" class="w-5 h-5 text-primary"></i>
+                    </span>
+                    <span class="flex items-center gap-1 text-xs font-inter font-medium text-green-400 bg-green-400/10 px-2 py-1 rounded-full">
+                        <i data-lucide="trending-up" class="w-3 h-3"></i> +15.7%
+                    </span>
+                </div>
+                <p class="font-inter text-2xl font-bold text-white">12,305</p>
+                <p class="font-inter text-xs text-gray-500 mt-1">Total Customers</p>
+            </div>
+
+            <div class="bg-dark-card border border-dark-border rounded-2xl p-5">
+                <div class="flex items-center justify-between mb-3">
+                    <span class="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center">
+                        <i data-lucide="percent" class="w-5 h-5 text-purple-400"></i>
+                    </span>
+                    <span class="flex items-center gap-1 text-xs font-inter font-medium text-red-400 bg-red-400/10 px-2 py-1 rounded-full">
+                        <i data-lucide="trending-down" class="w-3 h-3"></i> -2.1%
+                    </span>
+                </div>
+                <p class="font-inter text-2xl font-bold text-white">68.4%</p>
+                <p class="font-inter text-xs text-gray-500 mt-1">Conversion Rate</p>
+            </div>
+
+        </div>
+
+        <!-- Charts Row -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            <!-- Revenue Line Chart -->
+            <div class="lg:col-span-2 bg-dark-card border border-dark-border rounded-2xl p-5 sm:p-6">
+                <div class="flex items-center justify-between mb-5">
+                    <div>
+                        <h3 class="font-poppins font-semibold text-base text-white">Revenue Overview</h3>
+                        <p class="font-inter text-xs text-gray-500 mt-0.5">Monthly revenue in 2025</p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="flex items-center gap-1.5">
+                            <div class="w-2.5 h-2.5 rounded-full bg-primary"></div>
+                            <span class="font-inter text-xs text-gray-400">Revenue</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <div class="w-2.5 h-2.5 rounded-full bg-blue-400"></div>
+                            <span class="font-inter text-xs text-gray-400">Target</span>
+                        </div>
+                    </div>
+                </div>
+                <canvas id="revenueChart"></canvas>
+            </div>
+
+            <!-- Marketing Pie Chart -->
+            <div class="bg-dark-card border border-dark-border rounded-2xl p-5 sm:p-6">
+                <div class="mb-5">
+                    <h3 class="font-poppins font-semibold text-base text-white">Marketing Channels</h3>
+                    <p class="font-inter text-xs text-gray-500 mt-0.5">Traffic distribution by source</p>
+                </div>
+                <canvas id="marketingChart"></canvas>
+                <div class="mt-4 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <div class="w-2.5 h-2.5 rounded-full bg-primary"></div>
+                            <span class="font-inter text-xs text-gray-400">Organic Search</span>
+                        </div>
+                        <span class="font-inter text-xs font-medium text-gray-300">34%</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <div class="w-2.5 h-2.5 rounded-full bg-blue-400"></div>
+                            <span class="font-inter text-xs text-gray-400">Paid Ads</span>
+                        </div>
+                        <span class="font-inter text-xs font-medium text-gray-300">28%</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <div class="w-2.5 h-2.5 rounded-full bg-green-400"></div>
+                            <span class="font-inter text-xs text-gray-400">Social Media</span>
+                        </div>
+                        <span class="font-inter text-xs font-medium text-gray-300">22%</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <div class="w-2.5 h-2.5 rounded-full bg-purple-400"></div>
+                            <span class="font-inter text-xs text-gray-400">Direct</span>
+                        </div>
+                        <span class="font-inter text-xs font-medium text-gray-300">16%</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Second Charts Row -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+            <!-- Category Bar Chart -->
+            <div class="bg-dark-card border border-dark-border rounded-2xl p-5 sm:p-6">
+                <div class="flex items-center justify-between mb-5">
+                    <div>
+                        <h3 class="font-poppins font-semibold text-base text-white">Sales by Category</h3>
+                        <p class="font-inter text-xs text-gray-500 mt-0.5">Revenue per product category</p>
+                    </div>
+                    <button class="flex items-center gap-1 text-xs text-gray-400 hover:text-primary transition-colors duration-200 font-inter cursor-pointer">
+                        View All
+                        <i data-lucide="chevron-right" class="w-3 h-3"></i>
+                    </button>
+                </div>
+                <canvas id="categoryChart"></canvas>
+            </div>
+
+            <!-- Orders Area Chart -->
+            <div class="bg-dark-card border border-dark-border rounded-2xl p-5 sm:p-6">
+                <div class="flex items-center justify-between mb-5">
+                    <div>
+                        <h3 class="font-poppins font-semibold text-base text-white">Order Volume</h3>
+                        <p class="font-inter text-xs text-gray-500 mt-0.5">Weekly orders trend</p>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <div class="flex items-center gap-1.5">
+                            <div class="w-2.5 h-2.5 rounded-full bg-green-400"></div>
+                            <span class="font-inter text-xs text-gray-400">Completed</span>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <div class="w-2.5 h-2.5 rounded-full bg-yellow-400"></div>
+                            <span class="font-inter text-xs text-gray-400">Pending</span>
+                        </div>
+                    </div>
+                </div>
+                <canvas id="orderChart"></canvas>
+            </div>
+
+        </div>
+
+        <!-- Top Sales Reps -->
+        <div class="bg-dark-card border border-dark-border rounded-2xl overflow-hidden">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-5 sm:p-6 pb-4">
+                <div>
+                    <h3 class="font-poppins font-semibold text-base text-white">Top 10 Sales Representatives</h3>
+                    <p class="font-inter text-xs text-gray-500 mt-0.5">Best performing staff this period</p>
+                </div>
+                <div class="flex items-center bg-dark-bg border border-dark-border rounded-lg p-0.5">
+                    <button id="tabMonthly" class="px-3 py-1.5 text-xs font-inter font-medium rounded-md transition-all duration-200 cursor-pointer bg-primary text-white">Monthly</button>
+                    <button id="tabQuarterly" class="px-3 py-1.5 text-xs font-inter font-medium rounded-md transition-all duration-200 cursor-pointer text-gray-400 hover:text-gray-200">Quarterly</button>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full min-w-[600px]">
+                    <thead>
+                        <tr class="border-b border-dark-border">
+                            <th class="text-left px-5 sm:px-6 py-3 font-inter text-xs font-semibold text-gray-500 uppercase tracking-wider w-12">Rank</th>
+                            <th class="text-left px-5 sm:px-6 py-3 font-inter text-xs font-semibold text-gray-500 uppercase tracking-wider">Employee</th>
+                            <th class="text-left px-5 sm:px-6 py-3 font-inter text-xs font-semibold text-gray-500 uppercase tracking-wider">Department</th>
+                            <th class="text-left px-5 sm:px-6 py-3 font-inter text-xs font-semibold text-gray-500 uppercase tracking-wider">Revenue</th>
+                            <th class="text-left px-5 sm:px-6 py-3 font-inter text-xs font-semibold text-gray-500 uppercase tracking-wider">Orders</th>
+                            <th class="text-left px-5 sm:px-6 py-3 font-inter text-xs font-semibold text-gray-500 uppercase tracking-wider">Performance</th>
+                        </tr>
+                    </thead>
+                    <tbody id="salesRepBody" class="divide-y divide-dark-border">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Revenue by Region -->
+        <div class="bg-dark-card border border-dark-border rounded-2xl p-5 sm:p-6">
+            <div class="flex items-center justify-between mb-5">
+                <div>
+                    <h3 class="font-poppins font-semibold text-base text-white">Revenue by Region</h3>
+                    <p class="font-inter text-xs text-gray-500 mt-0.5">Geographic sales distribution</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-1.5">
+                        <div class="w-2.5 h-2.5 rounded-full bg-primary"></div>
+                        <span class="font-inter text-xs text-gray-400">Q1</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <div class="w-2.5 h-2.5 rounded-full bg-blue-400"></div>
+                        <span class="font-inter text-xs text-gray-400">Q2</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <div class="w-2.5 h-2.5 rounded-full bg-green-400"></div>
+                        <span class="font-inter text-xs text-gray-400">Q3</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <div class="w-2.5 h-2.5 rounded-full bg-purple-400"></div>
+                        <span class="font-inter text-xs text-gray-400">Q4</span>
+                    </div>
+                </div>
+            </div>
+            <canvas id="regionChart"></canvas>
+        </div>
+
+        <!-- Data Table -->
+        <div class="bg-dark-card border border-dark-border rounded-2xl overflow-hidden">
+            <div class="flex items-center justify-between p-5 sm:p-6 pb-0">
+                <div>
+                    <h3 class="font-poppins font-semibold text-base text-white">Recent Orders</h3>
+                    <p class="font-inter text-xs text-gray-500 mt-0.5">Latest 10 transactions</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-inter text-gray-400 hover:text-gray-200 bg-dark-bg border border-dark-border rounded-lg hover:border-primary/40 transition-all duration-200 cursor-pointer">
+                        <i data-lucide="search" class="w-3.5 h-3.5"></i>
+                        <span class="hidden sm:inline">Search</span>
+                    </button>
+                    <button class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-inter text-gray-400 hover:text-gray-200 bg-dark-bg border border-dark-border rounded-lg hover:border-primary/40 transition-all duration-200 cursor-pointer">
+                        <i data-lucide="filter" class="w-3.5 h-3.5"></i>
+                        <span class="hidden sm:inline">Filter</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="overflow-x-auto">
+                <table class="w-full min-w-[600px]">
+                    <thead>
+                        <tr class="border-b border-dark-border">
+                            <th class="text-left px-5 sm:px-6 py-3 font-inter text-xs font-semibold text-gray-500 uppercase tracking-wider">Order ID</th>
+                            <th class="text-left px-5 sm:px-6 py-3 font-inter text-xs font-semibold text-gray-500 uppercase tracking-wider">Customer</th>
+                            <th class="text-left px-5 sm:px-6 py-3 font-inter text-xs font-semibold text-gray-500 uppercase tracking-wider">Product</th>
+                            <th class="text-left px-5 sm:px-6 py-3 font-inter text-xs font-semibold text-gray-500 uppercase tracking-wider">Date</th>
+                            <th class="text-left px-5 sm:px-6 py-3 font-inter text-xs font-semibold text-gray-500 uppercase tracking-wider">Amount</th>
+                            <th class="text-left px-5 sm:px-6 py-3 font-inter text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="text-right px-5 sm:px-6 py-3 font-inter text-xs font-semibold text-gray-500 uppercase tracking-wider">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-dark-border">
+                        <tr class="hover:bg-dark-border/30 transition-colors duration-150">
+                            <td class="px-5 sm:px-6 py-4 font-inter text-sm font-medium text-primary">#ORD-2025-001</td>
+                            <td class="px-5 sm:px-6 py-4">
+                                <div class="flex items-center gap-2.5">
+                                    <div class="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center shrink-0">
+                                        <span class="text-blue-400 font-poppins font-semibold text-xs">JW</span>
+                                    </div>
+                                    <div>
+                                        <p class="font-inter text-sm text-gray-200">James Wilson</p>
+                                        <p class="font-inter text-xs text-gray-500">j.wilson@mail.com</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-5 sm:px-6 py-4 font-inter text-sm text-gray-300">Wireless Headphones Pro</td>
+                            <td class="px-5 sm:px-6 py-4 font-inter text-sm text-gray-400">Jan 15, 2025</td>
+                            <td class="px-5 sm:px-6 py-4 font-inter text-sm font-semibold text-gray-200">$149.99</td>
+                            <td class="px-5 sm:px-6 py-4">
+                                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-inter font-medium bg-green-400/10 text-green-400 border border-green-400/20">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-green-400"></span> Completed
+                                </span>
+                            </td>
+                            <td class="px-5 sm:px-6 py-4 text-right">
+                                <button class="p-1.5 rounded-lg hover:bg-dark-border transition-colors duration-200 text-gray-500 hover:text-gray-300 cursor-pointer">
+                                    <i data-lucide="more-horizontal" class="w-4 h-4"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-dark-border/30 transition-colors duration-150">
+                            <td class="px-5 sm:px-6 py-4 font-inter text-sm font-medium text-primary">#ORD-2025-002</td>
+                            <td class="px-5 sm:px-6 py-4">
+                                <div class="flex items-center gap-2.5">
+                                    <div class="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center shrink-0">
+                                        <span class="text-purple-400 font-poppins font-semibold text-xs">SM</span>
+                                    </div>
+                                    <div>
+                                        <p class="font-inter text-sm text-gray-200">Sarah Miller</p>
+                                        <p class="font-inter text-xs text-gray-500">s.miller@mail.com</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-5 sm:px-6 py-4 font-inter text-sm text-gray-300">Smart Watch Series 5</td>
+                            <td class="px-5 sm:px-6 py-4 font-inter text-sm text-gray-400">Jan 18, 2025</td>
+                            <td class="px-5 sm:px-6 py-4 font-inter text-sm font-semibold text-gray-200">$299.00</td>
+                            <td class="px-5 sm:px-6 py-4">
+                                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-inter font-medium bg-yellow-400/10 text-yellow-400 border border-yellow-400/20">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-yellow-400"></span> Pending
+                                </span>
+                            </td>
+                            <td class="px-5 sm:px-6 py-4 text-right">
+                                <button class="p-1.5 rounded-lg hover:bg-dark-border transition-colors duration-200 text-gray-500 hover:text-gray-300 cursor-pointer">
+                                    <i data-lucide="more-horizontal" class="w-4 h-4"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-dark-border/30 transition-colors duration-150">
+                            <td class="px-5 sm:px-6 py-4 font-inter text-sm font-medium text-primary">#ORD-2025-003</td>
+                            <td class="px-5 sm:px-6 py-4">
+                                <div class="flex items-center gap-2.5">
+                                    <div class="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center shrink-0">
+                                        <span class="text-green-400 font-poppins font-semibold text-xs">DK</span>
+                                    </div>
+                                    <div>
+                                        <p class="font-inter text-sm text-gray-200">David Kim</p>
+                                        <p class="font-inter text-xs text-gray-500">d.kim@mail.com</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-5 sm:px-6 py-4 font-inter text-sm text-gray-300">Portable Bluetooth Speaker</td>
+                            <td class="px-5 sm:px-6 py-4 font-inter text-sm text-gray-400">Jan 22, 2025</td>
+                            <td class="px-5 sm:px-6 py-4 font-inter text-sm font-semibold text-gray-200">$79.99</td>
+                            <td class="px-5 sm:px-6 py-4">
+                                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-inter font-medium bg-green-400/10 text-green-400 border border-green-400/20">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-green-400"></span> Completed
+                                </span>
+                            </td>
+                            <td class="px-5 sm:px-6 py-4 text-right">
+                                <button class="p-1.5 rounded-lg hover:bg-dark-border transition-colors duration-200 text-gray-500 hover:text-gray-300 cursor-pointer">
+                                    <i data-lucide="more-horizontal" class="w-4 h-4"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-dark-border/30 transition-colors duration-150">
+                            <td class="px-5 sm:px-6 py-4 font-inter text-sm font-medium text-primary">#ORD-2025-004</td>
+                            <td class="px-5 sm:px-6 py-4">
+                                <div class="flex items-center gap-2.5">
+                                    <div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
+                                        <span class="text-primary font-poppins font-semibold text-xs">LB</span>
+                                    </div>
+                                    <div>
+                                        <p class="font-inter text-sm text-gray-200">Lisa Brown</p>
+                                        <p class="font-inter text-xs text-gray-500">l.brown@mail.com</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-5 sm:px-6 py-4 font-inter text-sm text-gray-300">Mechanical Gaming Keyboard</td>
+                            <td class="px-5 sm:px-6 py-4 font-inter text-sm text-gray-400">Jan 25, 2025</td>
+                            <td class="px-5 sm:px-6 py-4 font-inter text-sm font-semibold text-gray-200">$189.00</td>
+                            <td class="px-5 sm:px-6 py-4">
+                                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-inter font-medium bg-red-400/10 text-red-400 border border-red-400/20">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-red-400"></span> Cancelled
+                                </span>
+                            </td>
+                            <td class="px-5 sm:px-6 py-4 text-right">
+                                <button class="p-1.5 rounded-lg hover:bg-dark-border transition-colors duration-200 text-gray-500 hover:text-gray-300 cursor-pointer">
+                                    <i data-lucide="more-horizontal" class="w-4 h-4"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-dark-border/30 transition-colors duration-150">
+                            <td class="px-5 sm:px-6 py-4 font-inter text-sm font-medium text-primary">#ORD-2025-005</td>
+                            <td class="px-5 sm:px-6 py-4">
+                                <div class="flex items-center gap-2.5">
+                                    <div class="w-8 h-8 rounded-full bg-red-500/20 flex items-center justify-center shrink-0">
+                                        <span class="text-red-400 font-poppins font-semibold text-xs">MT</span>
+                                    </div>
+                                    <div>
+                                        <p class="font-inter text-sm text-gray-200">Michael Thompson</p>
+                                        <p class="font-inter text-xs text-gray-500">m.thompson@mail.com</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-5 sm:px-6 py-4 font-inter text-sm text-gray-300">USB-C Hub 7-in-1</td>
+                            <td class="px-5 sm:px-6 py-4 font-inter text-sm text-gray-400">Jan 28, 2025</td>
+                            <td class="px-5 sm:px-6 py-4 font-inter text-sm font-semibold text-gray-200">$59.99</td>
+                            <td class="px-5 sm:px-6 py-4">
+                                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-inter font-medium bg-green-400/10 text-green-400 border border-green-400/20">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-green-400"></span> Completed
+                                </span>
+                            </td>
+                            <td class="px-5 sm:px-6 py-4 text-right">
+                                <button class="p-1.5 rounded-lg hover:bg-dark-border transition-colors duration-200 text-gray-500 hover:text-gray-300 cursor-pointer">
+                                    <i data-lucide="more-horizontal" class="w-4 h-4"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Table Footer -->
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3 px-5 sm:px-6 py-4 border-t border-dark-border">
+                <p class="font-inter text-xs text-gray-500">Showing 5 of 3,847 orders</p>
+                <div class="flex items-center gap-1">
+                    <button class="p-2 rounded-lg hover:bg-dark-border transition-colors duration-200 text-gray-500 hover:text-gray-300 cursor-pointer disabled:opacity-40" disabled>
+                        <i data-lucide="chevron-left" class="w-4 h-4"></i>
+                    </button>
+                    <button class="w-8 h-8 rounded-lg bg-primary text-white text-sm font-inter cursor-pointer">1</button>
+                    <button class="w-8 h-8 rounded-lg hover:bg-dark-border text-gray-400 hover:text-gray-200 text-sm font-inter transition-colors duration-200 cursor-pointer">2</button>
+                    <button class="w-8 h-8 rounded-lg hover:bg-dark-border text-gray-400 hover:text-gray-200 text-sm font-inter transition-colors duration-200 cursor-pointer">3</button>
+                    <span class="px-2 text-gray-600 font-inter text-sm">...</span>
+                    <button class="w-8 h-8 rounded-lg hover:bg-dark-border text-gray-400 hover:text-gray-200 text-sm font-inter transition-colors duration-200 cursor-pointer">385</button>
+                    <button class="p-2 rounded-lg hover:bg-dark-border transition-colors duration-200 text-gray-500 hover:text-gray-300 cursor-pointer">
+                        <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        const chartDefaults = {
+            color: '#9CA3AF',
+            borderColor: '#1C1F3A',
+            font: { family: "'Inter', sans-serif", size: 12 }
+        };
+
+        Chart.defaults.color = chartDefaults.color;
+        Chart.defaults.borderColor = chartDefaults.borderColor;
+        Chart.defaults.font.family = chartDefaults.font.family;
+        Chart.defaults.font.size = chartDefaults.font.size;
+
+        // Revenue Line Chart
+        new Chart(document.getElementById('revenueChart'), {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [
+                    {
+                        label: 'Revenue',
+                        data: [18500, 21300, 19800, 24100, 22800, 27600, 25400, 31200, 28900, 34500, 32100, 38700],
+                        borderColor: '#DF6B33',
+                        backgroundColor: 'rgba(223, 107, 51, 0.08)',
+                        borderWidth: 2.5,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 3,
+                        pointHoverRadius: 6,
+                        pointBackgroundColor: '#DF6B33',
+                    },
+                    {
+                        label: 'Target',
+                        data: [20000, 20000, 22000, 22000, 24000, 24000, 26000, 26000, 28000, 30000, 32000, 35000],
+                        borderColor: '#60A5FA',
+                        backgroundColor: 'transparent',
+                        borderWidth: 2,
+                        borderDash: [5, 5],
+                        fill: false,
+                        tension: 0.4,
+                        pointRadius: 0,
+                        pointHoverRadius: 4,
+                        pointBackgroundColor: '#60A5FA',
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                interaction: { mode: 'index', intersect: false },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#111222',
+                        borderColor: '#1C1F3A',
+                        borderWidth: 1,
+                        titleColor: '#E2E4E8',
+                        bodyColor: '#9CA3AF',
+                        padding: 12,
+                        callbacks: {
+                            label: (ctx) => ` $${ctx.parsed.y.toLocaleString()}`
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { color: 'rgba(28, 31, 58, 0.5)', drawBorder: false },
+                        ticks: { color: '#6B7280', font: { size: 11 } }
+                    },
+                    y: {
+                        grid: { color: 'rgba(28, 31, 58, 0.5)', drawBorder: false },
+                        ticks: {
+                            color: '#6B7280', font: { size: 11 },
+                            callback: (v) => `$${v >= 1000 ? (v / 1000) + 'k' : v}`
+                        }
+                    }
+                }
+            }
+        });
+
+        // Marketing Pie Chart
+        new Chart(document.getElementById('marketingChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Organic Search', 'Paid Ads', 'Social Media', 'Direct'],
+                datasets: [{
+                    data: [34, 28, 22, 16],
+                    backgroundColor: ['#DF6B33', '#60A5FA', '#34D399', '#A78BFA'],
+                    borderColor: '#111222',
+                    borderWidth: 3,
+                    hoverOffset: 6,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                cutout: '65%',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#111222',
+                        borderColor: '#1C1F3A',
+                        borderWidth: 1,
+                        titleColor: '#E2E4E8',
+                        bodyColor: '#9CA3AF',
+                        padding: 12,
+                        callbacks: {
+                            label: (ctx) => ` ${ctx.label}: ${ctx.parsed}%`
+                        }
+                    }
+                }
+            }
+        });
+
+        // Category Bar Chart
+        new Chart(document.getElementById('categoryChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Electronics', 'Fashion', 'Home', 'Beauty', 'Sports', 'Books'],
+                datasets: [{
+                    label: 'Revenue',
+                    data: [84200, 61800, 47300, 38900, 29100, 18600],
+                    backgroundColor: [
+                        'rgba(223, 107, 51, 0.85)',
+                        'rgba(223, 107, 51, 0.65)',
+                        'rgba(223, 107, 51, 0.50)',
+                        'rgba(223, 107, 51, 0.38)',
+                        'rgba(223, 107, 51, 0.28)',
+                        'rgba(223, 107, 51, 0.18)',
+                    ],
+                    borderColor: '#DF6B33',
+                    borderWidth: 0,
+                    borderRadius: 8,
+                    borderSkipped: false,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#111222',
+                        borderColor: '#1C1F3A',
+                        borderWidth: 1,
+                        titleColor: '#E2E4E8',
+                        bodyColor: '#9CA3AF',
+                        padding: 12,
+                        callbacks: {
+                            label: (ctx) => ` $${ctx.parsed.y.toLocaleString()}`
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#6B7280', font: { size: 11 } }
+                    },
+                    y: {
+                        grid: { color: 'rgba(28, 31, 58, 0.5)', drawBorder: false },
+                        ticks: {
+                            color: '#6B7280', font: { size: 11 },
+                            callback: (v) => `$${v >= 1000 ? (v / 1000) + 'k' : v}`
+                        }
+                    }
+                }
+            }
+        });
+
+        // Order Area Chart
+        new Chart(document.getElementById('orderChart'), {
+            type: 'line',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                datasets: [
+                    {
+                        label: 'Completed',
+                        data: [312, 387, 445, 512],
+                        borderColor: '#34D399',
+                        backgroundColor: 'rgba(52, 211, 153, 0.08)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 3,
+                        pointHoverRadius: 6,
+                        pointBackgroundColor: '#34D399',
+                    },
+                    {
+                        label: 'Pending',
+                        data: [48, 63, 57, 71],
+                        borderColor: '#FBBF24',
+                        backgroundColor: 'rgba(251, 191, 36, 0.06)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 3,
+                        pointHoverRadius: 6,
+                        pointBackgroundColor: '#FBBF24',
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                interaction: { mode: 'index', intersect: false },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#111222',
+                        borderColor: '#1C1F3A',
+                        borderWidth: 1,
+                        titleColor: '#E2E4E8',
+                        bodyColor: '#9CA3AF',
+                        padding: 12,
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { color: 'rgba(28, 31, 58, 0.5)', drawBorder: false },
+                        ticks: { color: '#6B7280', font: { size: 11 } }
+                    },
+                    y: {
+                        grid: { color: 'rgba(28, 31, 58, 0.5)', drawBorder: false },
+                        ticks: { color: '#6B7280', font: { size: 11 } }
+                    }
+                }
+            }
+        });
+    </script>
+
+</body>
+</html>
